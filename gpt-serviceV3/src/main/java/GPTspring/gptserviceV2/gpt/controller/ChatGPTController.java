@@ -30,12 +30,18 @@ public class ChatGPTController {
     }
 
     @PostMapping("/imagePrompt")
-    public String  imagePrompt(@RequestBody ImageURLDto imageURLDto){
+    public String imagePrompt(@RequestBody ImageURLDto imageURLDto){
         Map<String, Object> result = chatGPTService.promptV2(imageURLDto);
         String newResult = responseToService.responseData(result);
         responseToService.stringToJson(newResult);
         return newResult;
-        //return new ResponseEntity<>(result, HttpStatus.OK);
+        // return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    @PostMapping("/imagePrompt1")
+    public ResponseEntity<Map<String, Object>> imagePrompt1(@RequestBody ImageURLDto imageURLDto){
+        Map<String, Object> result = chatGPTService.promptV2(imageURLDto);
+        String newResult = responseToService.responseData(result);
+        return new ResponseEntity<>(responseToService.stringToJson(newResult), HttpStatus.OK);
     }
 
     public String test(String result){
