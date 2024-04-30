@@ -11,13 +11,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ public class ResponseToServiceImpl implements ResponseToService {
     private String promptUrl;
 
 
-    String question1= "This is the text I extracted from the receipt, and I want to change the item and total price to json format.";
+    String question1= "Could you please categorize the purchased items on this receipt into the categories ‘Food’, ‘Accommodation’, ‘Shopping’, ‘Transportation’, and ‘Other’ and format them in JSON format, including the name and price of each item?";
     @Override
     public String responseData(Map<String, Object> response) {
         String contentValue = (String) response.get("content");
@@ -40,7 +40,7 @@ public class ResponseToServiceImpl implements ResponseToService {
         Map<String, Object> resultMap = new HashMap<>();
         HttpHeaders headers = chatGPTConfig.httpHeaders();
 
-        ContentDto textContent = new ContentDto("text", question1 + contentValue);
+        ContentDto textContent = new ContentDto("text",contentValue + question1);
         MessageDto message = new MessageDto("user", Arrays.asList(textContent));
 
         // 응답 데이터 포멧 설정
@@ -53,10 +53,18 @@ public class ResponseToServiceImpl implements ResponseToService {
 
     @Override
     public Map<String, Object> stringToJson(String newResult) {
-        JSONParser jsonParser = new JSONParser(newResult);
-        System.out.println(jsonParser);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> jsonMap = new HashMap<>();
 
-        return null;
+        try {
+            // JSON 문자열을 Map 객체로 변환
+            jsonMap = objectMapper.readValue(newResult, new TypeReference<Map<String, Object>>() {});
+            log.info("JSON to Map conversion successful.");
+        } catch (JsonProcessingException e) {
+            log.error("Error converting JSON to Map: {}", e.getMessage());
+        }
+
+        return jsonMap;
     }
 
     private String getStringObjectMap(Map<String, Object> resultMap, HttpHeaders headers, ImageAnalysisRequestDto requestDto) {
