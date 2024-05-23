@@ -32,7 +32,7 @@ public class ResponseToServiceImpl implements ResponseToService {
     private String promptUrl;
 
 
-    String question1= "Could you please categorize the purchased items on this receipt into the categories ‘Food’, ‘Accommodation’, ‘Shopping’, ‘Transportation’, and ‘Other’ and format them in JSON format, including the name and price of each item?";
+    String question1= "This is text extracted from the receipt. Classify purchased items into 'food', 'accommodation', 'shopping', 'transportation', and 'other' categories and generate the total amount for each category in json format. This json must include the following keys: 'Food', 'Accommodation', 'Shopping', 'Transportation', and 'Other'. If there is no total amount, display it as 0.";
     @Override
     public String responseData(Map<String, Object> response) {
         String contentValue = (String) response.get("content");
