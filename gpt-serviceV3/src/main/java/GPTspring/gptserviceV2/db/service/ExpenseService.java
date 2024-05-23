@@ -51,7 +51,7 @@ public class ExpenseService {
 
         double totalAverage = totalSum / (count * 5); // 모든 항목의 평균의 평균
         Map<String, Double> result = new HashMap<>();
-        result.put("total_average", totalAverage);
+        result.put("total_average", (double)Math.round(totalAverage));
         return result;
     }
 
