@@ -1,6 +1,6 @@
 # `branch전략, PR, commit 컨벤션`
 
-Smart-Parking 프로젝트 브랜치 전략과 풀 리퀘스트
+여정 프로젝트 브랜치 전략과 풀 리퀘스트
 
 <br>
 
